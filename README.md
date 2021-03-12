@@ -29,6 +29,8 @@ Before running the pipeline, please have the following files donwloaded and put 
 ```
 wget --timestamping 'ftp://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.ncbiRefSeq.gtf.gz'
 gunzip hg38.ncbiRefSeq.gtf.gz
+
+gzip -d hg38.ncbiRefSeq.gtf.gz
 ```
 * RNA-seq fastq files: These are the files from which you want to detect viral sequences. Download the RNA-seq fastq files into the `data` folder in this repository. If your file is single end reads, make sure it is named `sample_r1.fastq`, where `sample` is your SRA number. If your file is paired end reads, make sure you have two files `sample_r1.fastq` and `sample_r2.fastq`.
 
