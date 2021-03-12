@@ -58,6 +58,8 @@ rule unmapped_bam:
         "../{sample}/star_unmapped/align_unmapped.bam"
     params:
         sra = "{sample}"
+    conda:
+        "../envs/unmapped.yaml"
     shell:
         "samtools view -f 12 {input} > {output}"
 
@@ -69,6 +71,8 @@ rule bam_to_fq:
         f2="../{sample}/star_unmapped/align_unmapped2.fq"
     params:
         sra = "{sample}"
+    conda:
+        "../envs/unmapped.yaml"
     run:
         command=[
         "samtools sort -n {input} -o ../{sample}/star_unmapped/unmapped.sorted.bam",
@@ -97,6 +101,8 @@ rule blastn:
         "../{sample}/assembled_contigs/final.contigs.fa"
     output:
         "../{sample}/blast_result/blast_out.txt"
+    conda:
+        "../envs/unmapped.yaml"
     threads:
         config["threads"]
     shell:
