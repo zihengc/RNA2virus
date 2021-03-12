@@ -1,6 +1,5 @@
 #!/bin/bash
 
-module load BLAST
 mode=$1
 core=$2
 sample=$3
