@@ -67,12 +67,8 @@ rule bam_to_fq:
         sra = "{sample}"
     conda:
         "../envs/unmapped.yaml"
-    run:
-        command=[
+    shell:
         "bedtools bamtofastq -i {input} -fq {output}"
-	]
-        for c in command:
-            shell(c)
 
 rule unmapped_assembly:
     input:
