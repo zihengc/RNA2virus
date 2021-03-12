@@ -73,14 +73,10 @@ rule bam_to_fq:
         sra = "{sample}"
     conda:
         "../envs/unmapped.yaml"
-    run:
-        command=[
+    shell:
         "samtools sort -n {input} -o ../{sample}/star_unmapped/unmapped.sorted.bam",
         "bedtools bamtofastq -i ../{sample}/star_unmapped/unmapped.sorted.bam -fq {output.f1} -fq2 {output.f2}"
-	]
-        for c in command:
-            shell(c)
-
+	
 rule unmapped_assembly:
     input:
         unmapped1="../{sample}/star_unmapped/align_unmapped1.fq",
