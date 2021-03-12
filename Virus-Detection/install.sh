@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#Input 1 is the number of cores
-core=$1
-
 #Flag -c is the number of cores
 verbose='false'
 core=16
