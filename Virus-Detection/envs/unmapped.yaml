@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - star =2.7.8a
+  - samtools =1.11
+  - bedtools =2.29.2
+  - blast

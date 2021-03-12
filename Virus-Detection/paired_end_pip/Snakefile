@@ -1,0 +1,129 @@
+configfile: "../config.yaml"
+rule filter_reads:
+    input:
+      r1="../data/{sample}_r1.fastq",
+      r2="../data/{sample}_r2.fastq"
+    output:
+      r1_paired="../{sample}/trimmed_fastq/r1_paired_trimmed.fastq",
+      r1_unpaired="../{sample}/trimmed_fastq/r1_unpaired_trimmed.fastq",
+      r2_paired="../{sample}/trimmed_fastq/r2_paired_trimmed.fastq",
+      r2_unpaired="../{sample}/trimmed_fastq/r2_unpaired_trimmed.fastq"
+    threads:
+        config["threads"]
+    shell:
+        "java -jar ../src/Trimmomatic-0.39/trimmomatic-0.39.jar PE -threads {threads} -trimlog trim.log {input.r1} {input.r2} {output.r1_paired} {output.r1_unpaired} {output.r2_paired} {output.r2_unpaired} SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:36"
+
+
+rule quality_report:
+    input:
+        r1_paired="../{sample}/trimmed_fastq/r1_paired_trimmed.fastq",
+        r2_paired="../{sample}/trimmed_fastq/r2_paired_trimmed.fastq"
+    output:
+        #zip="../{sample}/fastqc_report/r1_paired_trimmed.fastq",
+        html1="../{sample}/fastqc_report/r1_paired_trimmed_fastqc.html",
+        html2="../{sample}/fastqc_report/r2_paired_trimmed_fastqc.html"
+
+    run:
+        commands = [
+            "chmod +x ../src/FastQC/fastqc",
+            "../src/FastQC/fastqc {input.r1_paired}",
+            "../src/FastQC/fastqc {input.r2_paired}",
+            "mv ../{wildcards.sample}/trimmed_fastq/*fastqc* ../{wildcards.sample}/fastqc_report/"
+        ]
+        for c in commands:
+            shell(c)
+
+
+rule align:
+    input:
+        fq1 = "../{sample}/trimmed_fastq/r1_paired_trimmed.fastq",
+        fq2 = "../{sample}/trimmed_fastq/r2_paired_trimmed.fastq"
+    output:
+        "../{sample}/star_aligned/Aligned.out.sam"
+    log:
+        "../{sample}/star_aligned/star_alignment.log"
+    params:
+        index=config["genomeDir"], #user/index
+        extra="--outSAMunmapped Within KeepPairs"
+    threads:
+        config["threads"]
+    wrapper:
+        "0.72.0/bio/star/align"
+# wrapper reference: https://snakemake-wrappers.readthedocs.io/en/stable/wrappers/star/align.html
+
+rule unmapped_bam:
+    input:
+        "../{sample}/star_aligned/Aligned.out.sam"
+    output:
+        "../{sample}/star_unmapped/align_unmapped.bam"
+    params:
+        sra = "{sample}"
+    shell:
+        "samtools view -f 12 {input} > {output}"
+
+rule bam_to_fq:
+    input:
+        "../{sample}/star_unmapped/align_unmapped.bam"
+    output:
+        f1="../{sample}/star_unmapped/align_unmapped1.fq",
+        f2="../{sample}/star_unmapped/align_unmapped2.fq"
+    params:
+        sra = "{sample}"
+    run:
+        command=[
+        "samtools sort -n {input} -o ../{sample}/star_unmapped/unmapped.sorted.bam",
+        "bedtools bamtofastq -i ../{sample}/star_unmapped/unmapped.sorted.bam -fq {output.f1} -fq2 {output.f2}"
+	]
+        for c in command:
+            shell(c)
+
+rule unmapped_assembly:
+    input:
+        unmapped1="../{sample}/star_unmapped/align_unmapped1.fq",
+        unmapped2="../{sample}/star_unmapped/align_unmapped2.fq"
+    output:
+        directory("../{sample}/assembled_contigs")
+    threads:
+        config["threads"]
+    run:
+        commands=[
+        "../src/MEGAHIT-1.2.9-Linux-x86_64-static/bin/megahit -1 {input.unmapped1} -2 {input.unmapped2} -o {output} -t {threads}"
+                ]
+        for c in commands:
+            shell(c)
+
+rule blastn:
+    input:
+        "../{sample}/assembled_contigs/final.contigs.fa"
+    output:
+        "../{sample}/blast_result/blast_out.txt"
+    threads:
+        config["threads"]
+    shell:
+        "blastn -query {input} -db ref_viruses_rep_genomes -out {output} -num_threads {threads} -word_size 11"
+
+rule orfFinder:
+    input:
+        "../{sample}/assembled_contigs/final.contigs.fa"
+    output:
+        "../{sample}/ORFfinder/contigsWithOrf.fa"
+    shell:
+        "../src/ORFfinder -in {input} -s 1 -out {output}"
+
+rule orfipy:
+    input:
+        "../{sample}/assembled_contigs/final.contigs.fa"
+    output:
+        directory("../{sample}/ORFfinder")
+    threads:
+        config["threads"]
+    shell:
+        "orfipy {input} --dna contigsWithOrf.fa --outdir ../{wildcards.sample}/ORFfinder --procs {threads}"
+
+rule RNAfold:
+    input:
+        "../{sample}/assembled_contigs/final.contigs.fa"
+    output:
+        "../{sample}/RNAfold_output/secondary_structure.str"
+    shell:
+        "../src/ViennaRNA-2.4.17/src/bin/RNAfold <{input} >{output}"
