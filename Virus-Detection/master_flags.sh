@@ -1,6 +1,5 @@
 #!/bin/bash
 
-module load BLAST
 #Flags: -m is 'PE' for 'pair-ended' or 'SE' for 'single-ended'
 #-c is the number of cores; -s is the sequence file.
 verbose='false'
