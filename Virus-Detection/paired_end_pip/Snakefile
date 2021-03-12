@@ -102,7 +102,7 @@ rule blastn:
     threads:
         config["threads"]
     shell:
-        "blastn -query {input} -db ref_viruses_rep_genomes -out {output} -num_threads {threads} -word_size 11 -max_target_seq 10"
+        "blastn -query {input} -db ref_viruses_rep_genomes -out {output} -num_threads {threads} -word_size 11 -max_target_seqs 10"
 
 rule orfFinder:
     input:
