@@ -4,7 +4,7 @@ Detect virus (known and novel) from human RNA-seq data.
 ## Authors
 * Ziheng Chen (zihengc)
 * Yian Liao (yian-liao)
-* Aidan Place
+* Aidan Place (aidanjplace)
 * Yizhou Wang (yizhou0201)
 
 ## Installation
