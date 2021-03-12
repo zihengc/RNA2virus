@@ -1,10 +1,10 @@
 gtf:
     # Change this to the path to your GTF genome annotation file.
-    /ocean/projects/mcb180074p/zihengc/Virus-Detection/genome/hg38_refseall_transcripts.gtf
+    /ocean/projects/mcb180074p/zihengc/Viral2/Virus-Detection/genome/hg38_refseall_transcripts.gtf
 
 genomeDir:
     # Change this to the path to the folder yuo want your genome index to be stored. This folder should be inside the Virus-Detection repository.
-    /ocean/projects/mcb180074p/zihengc/Virus-Detection/genome/hg38_refseq
+    /ocean/projects/mcb180074p/zihengc/Viral2/Virus-Detection/genome/hg38_refseq
 
 threads:
     # Change this to the number of cores you have available. We recommend 16 cores.
