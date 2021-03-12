@@ -74,7 +74,7 @@ rule bam_to_fq:
     conda:
         "../envs/unmapped.yaml"
     shell:
-        "samtools sort -n {input} -o ../{sample}/star_unmapped/unmapped.sorted.bam",
+        "samtools sort -n {input} -o ../{sample}/star_unmapped/unmapped.sorted.bam &&"
         "bedtools bamtofastq -i ../{sample}/star_unmapped/unmapped.sorted.bam -fq {output.f1} -fq2 {output.f2}"
 	
 rule unmapped_assembly:
