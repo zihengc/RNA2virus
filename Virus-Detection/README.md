@@ -15,9 +15,13 @@ Follow Snakemake's instruction on [Installation via Conda](https://snakemake.rea
 #### Download and `cd` into this repository 
 Download a local copy of this repository via
 ```
-git clone https://github.com/CMU-03713/Virus-Detection.git
+git clone https://github.com/CMU-03713/Viral2.git
 ```
-Then `cd` into this repository.
+Then `cd` into the `Virus-Detection` repository via
+```
+cd Viral2/Virus-Detection
+```
+All the following work should be done in this repository.
 
 ## Requiured input files
 Before running the pipeline, please have the following files donwloaded and put into the repository:
