@@ -66,3 +66,10 @@ bash master.sh PE {cores} {sample}
 replacing `{cores}` with the number of cores you have available, replaccing `{sample}` with the name of your sample RNA-seq. At this step, sample fastq files should be in `/data` and named as `sample_r1.fastq` and `sample_r2.fastq`.
 
 ## Output files description
+1. Trimmed sequences in `.fasta`.
+2. Quality control of the raw sequence data in `.html`.
+3. STAR
+4. Assembled contigs named 'final.contigs.fa'.
+5. BLAST report in `.txt`.
+6. Open Reading Frame report in `.fasta`.
+7. Secondary RNA strunctures in `.str`.
