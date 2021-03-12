@@ -95,6 +95,8 @@ rule blastn:
         "../{sample}/blast_result/blast_out.txt"
     threads:
         config["threads"]
+    conda:
+        "../envs/unmapped.yaml"
     shell:
         "blastn -query {input} -db ref_viruses_rep_genomes -out {output} -num_threads {threads} -word_size 11"
 
@@ -111,8 +113,6 @@ rule orfipy:
         "../{sample}/assembled_contigs/final.contigs.fa"
     output:
         directory("../{sample}/ORFfinder")
-    conda:
-        "../envs/orfprediction.yaml"
     threads:
         config["threads"]
     shell:
