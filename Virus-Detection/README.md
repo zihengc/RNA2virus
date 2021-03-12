@@ -23,7 +23,7 @@ cd Viral2/Virus-Detection
 ```
 All the following work should be done in this repository.
 
-## Requiured input files
+## Required input files
 Before running the pipeline, please have the following files donwloaded and put into the repository:
 * Reference human genome annotation gtf file: Required for STAR to build human genome index. We recommend downloading the NCBI RefSeq GTF file through UCSC genome browser via
 ```
@@ -66,11 +66,15 @@ bash master.sh PE {cores} {sample}
 replacing `{cores}` with the number of cores you have available, replaccing `{sample}` with the name of your sample RNA-seq. At this step, sample fastq files should be in `/data` and named as `sample_r1.fastq` and `sample_r2.fastq`.
 
 ## Output files description
+All of output file for single read `sample_r1.fastq` or paired end `sample_r1.fastq` and `sample_r2.fastq` will be put into a directory with the same name of your sample, inside the `Virus-Detection` folder. Inside this folder, there will be the following:
 1. Trimmed sequences of the raw sequencing files named `_trimmed.fasta` in `/trimmed_fastq` directory.
 2. Quality control of the raw sequence data named `_fastqc.html` and `_fastqc.zip` in `/fastqc_report` directory.
-3. Aligned sequence files named `Aligned.out.sam` in `/star_aligned` directory.
-4. Aligned sequence files named `aligned_unmapped.bam` and `aligned_unmapped.fq` in `/star_unmapped` directory.
-5. Assembled contigs named `final.contigs.fa` in `/assembled_contigs` directory.
-6. BLAST report named `blast_out.txt` in `/blast_result` directory.
-7. Open Reading Frame report named `contigsWithOrf.fasta` in `/ORFfinder` directory.
-8. Secondary RNA strunctures named `secondary_structure.str` in `/RNAfold` directory.
+3. RNA-seq alignment to human genome named `Aligned.out.sam` in `/star_aligned` directory.
+4. A summary of the RNA-seq alignment to human genome named `Log.final.out` in `/star_aligned` directory.
+(for more information related to STAR output in the `/star_aligned` directory, refer [STAR User Manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf))
+6. RNA-seq reads unmapped to human genome in bam format named `aligned_unmapped.bam` in `/star_unmapped` directory.
+7. RNA-seq reads unmapped to human genome in fastq format. `aligned_unmapped.fq` for single read data, or `aligned_unmapped1.fq` and `aligned_unmapped2.fq` for paired end data in `/star_unmapped` directory.
+8. Assembled contigs named `final.contigs.fa` in `/assembled_contigs` directory.
+9. BLAST report named `blast_out.txt` in `/blast_result` directory.
+10. Open Reading Frame report named `contigsWithOrf.fasta` in `/ORFfinder` directory.
+11. Secondary RNA strunctures named `secondary_structure.str` in `/RNAfold` directory.
