@@ -15,11 +15,11 @@ Follow Snakemake's instruction on [Installation via Conda](https://snakemake.rea
 #### Download and `cd` into this repository 
 Download a local copy of this repository via
 ```
-git clone https://github.com/CMU-03713/Viral2.git
+git clone https://github.com/CMU-03713/RNA2virus.git
 ```
 Then `cd` into the `Virus-Detection` repository via
 ```
-cd Viral2/Virus-Detection
+cd RNA2virus
 ```
 All the following work should be done in this repository.
 
